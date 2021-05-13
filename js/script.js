@@ -1,9 +1,15 @@
-let lienzo = document.getElementById("lienzo").getContext("2d");
-lienzo.canvas.width= 300;
-lienzo.canvas.height= 530;
+let lienzo = document.getElementById("lienzo");
+let ctx= lienzo.getContext("2d");
+let ancho=300;
+let alto= 530;
+let canvas_ancho=300;
+let canvas_alto=530;
+lienzo.width= ancho;
+lienzo.height= alto;
 let FPS=60;
 let puntuacion=0;
 let gravedad= 1.5;
+
 let personaje = {
     x:50,
     y:150,
@@ -13,7 +19,7 @@ let personaje = {
 
 let tuberias = new Array();
 tuberias[0] = {
-    x: lienzo.canvas.width,
+    x: lienzo.width,
     y: 0
 }
 
@@ -39,29 +45,40 @@ const presionarBoton =()=>{
     personaje.y -= 30;
 };
 
+const redimensionar =()=>{
+    canvas_ancho = window.innerWidth;
+    canvas_alto= window.innerHeight;
+
+    lienzo.width = ancho;
+    lienzo.height = alto;
+
+    lienzo.style.height =""+canvas_alto+"px";
+};
+redimensionar();
+
 const loop = ()=>{
     //Reiniciar personaje
-    lienzo.clearRect(0,0,300,530);
+    ctx.clearRect(0,0,300,530);
 
     //FONDO
-    lienzo.drawImage(fondo,0,0);
-    lienzo.drawImage(suelo,0, lienzo.canvas.height-suelo.height);
+    ctx.drawImage(fondo,0,0);
+    ctx.drawImage(suelo,0, lienzo.height-suelo.height);
     
     //PERSONAJE
-    lienzo.drawImage(bird, personaje.x, personaje.y);
+    ctx.drawImage(bird, personaje.x, personaje.y);
     
     //TUBERIAS
     for (let i=0; i < tuberias.length; i++){
         let constante= tuberiaN.height +80;
-        lienzo.drawImage(tuberiaN, tuberias[i].x, tuberias[i].y);
-        lienzo.drawImage(tuberiaS, tuberias[i].x, tuberias[i].y + constante);
+        ctx.drawImage(tuberiaN, tuberias[i].x, tuberias[i].y);
+        ctx.drawImage(tuberiaS, tuberias[i].x, tuberias[i].y + constante);
         tuberias[i].x--;
         if(tuberias[i].y + tuberiaN.height < 80){
             tuberias[i].y = 0 
         }
         if(tuberias[i].x ==100){
             tuberias.push({
-                x: lienzo.canvas.width,
+                x: lienzo.width,
                 y: Math.floor(Math.random()*tuberiaN.height) -tuberiaN.height
             });
         }
@@ -70,9 +87,9 @@ const loop = ()=>{
             personaje.x <= tuberias[i].x + tuberiaN.width-5 && 
             (personaje.y <= tuberias[i].y + tuberiaN.height-5 || 
             personaje.y + bird.height >= tuberias[i].y+10 + constante) ||
-            personaje.y + bird.height >= lienzo.canvas.height - suelo.height ){
+            personaje.y + bird.height >= lienzo.height - suelo.height ){
             location.reload();
-            alert("perdiste");
+            alert("Chocaste y perdiste :(");
         }
         //sumar puntos
         if(tuberias[i].x == personaje.x){
@@ -83,11 +100,12 @@ const loop = ()=>{
     //Desplazamiento del rectangulo en el eje Y
     personaje.y += gravedad;
     //Puntuacion
-    lienzo.fillStyle= "rgb(0,0,0)";
-    lienzo.font ="25px Arial";
-    lienzo.fillText("Puntos: "+puntuacion,5,lienzo.canvas.height-40 );
+    ctx.fillStyle= "rgb(0,0,0)";
+    ctx.font ="25px Arial";
+    ctx.fillText("Puntos: "+puntuacion,5,lienzo.height-40 );
 } 
 setInterval(loop, 1000/FPS);
 
 addEventListener('keydown', presionarBoton);
 addEventListener('touchstart', presionarBoton);
+addEventListener('resize', redimensionar);
