@@ -25,19 +25,19 @@ tuberias[0] = {
 
 //Imagenes
 let bird= new Image();
-bird.src= "../img/bird.png"
+bird.src= "img/bird.png"
 
 let fondo= new Image();
-fondo.src= "../img/background.png"
+fondo.src= "img/background.png"
 
 let suelo= new Image();
-suelo.src= "../img/suelo.png"
+suelo.src= "img/suelo.png"
 
 let tuberiaN= new Image();
-tuberiaN.src= "../img/tuberiaNorte.png"
+tuberiaN.src= "img/tuberiaNorte.png"
 
 let tuberiaS= new Image();
-tuberiaS.src= "../img/tuberiaSur.png"
+tuberiaS.src= "img/tuberiaSur.png"
 
 //Control
 const presionarBoton =()=>{
